@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Phishing Detection System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">Phishing Detection</div>
+    <ul class="nav-links">
+        <li><a href="#" onclick="showSection('home')">Home</a></li>
+        <li><a href="#" onclick="showSection('dataset')">Dataset</a></li>
+        <li><a href="#" onclick="showSection('prediction')">Prediction</a></li>
+        <li><a href="#" onclick="showSection('analysis')">Analysis</a></li>
+        <li><a href="#" onclick="showSection('performance')">Performance</a></li>
+        <li><a href="#" onclick="showSection('about')">About Us</a></li>
+    </ul>
+</nav>
+
+<!-- HOME -->
+<div id="home" class="section active">
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Phishing Detection System</h1>
+            <p>USING MACHINE LEARNING</p>
+        </div>
+    </div>
+</div>
+
+<!-- DATASET -->
+<div id="dataset" class="section">
+
+<h1 class="section-title">Phishing Dataset</h1>
+
+<div class="dataset-container">
+
+<form method="POST" action="/#dataset" class="dataset-form">
+
+<label>Select Dataset</label>
+
+<select name="dataset" class="dataset-dropdown" onchange="this.form.submit()">
+
+<option disabled selected>Select Dataset</option>
+<option value="URL">URL Dataset</option>
+<option value="SMS">SMS Dataset</option>
+<option value="Email">Email Dataset</option>
+
+</select>
+
+</form>
+
+</div>
+
+<div class="dataset-table">
+
+{% if table %}
+{{ table|safe }}
+{% endif %}
+
+</div>
+
+</div>
+
+<!-- PREDICTION -->
+
+<div id="prediction" class="section">
+
+<h1 class="section-title">Phishing Detection</h1>
+
+<div class="prediction-card">
+
+<h2>🔐 Phishing Detection System</h2>
+<br>
+<br>
+
+<label>Select Detection Type</label>
+
+<select id="detectType" onchange="switchDetection()">
+<option value="url" {% if detection=='url' %}selected{% endif %}>URL Detection</option>
+<option value="sms" {% if detection=='sms' %}selected{% endif %}>SMS Detection</option>
+<option value="email" {% if detection=='email' %}selected{% endif %}>Email Detection</option>
+</select>
+
+
+<!-- URL -->
+<div id="urlBox">
+
+<form action="/predict_url#prediction" method="POST">
+
+<label>Enter URL</label>
+
+<input type="text" name="url" value="{{url if url else ''}}">
+
+<button type="submit">Check URL</button>
+
+</form>
+
+</div>
+
+
+<!-- SMS -->
+<div id="smsBox">
+
+<form action="/predict_sms#prediction" method="POST">
+
+<label>Enter SMS Message</label>
+
+<textarea name="sms">{{sms if sms else ''}}</textarea>
+
+<button type="submit">Check SMS</button>
+
+</form>
+
+</div>
+
+
+<!-- EMAIL -->
+<div id="emailBox">
+
+<form action="/predict_email#prediction" method="POST">
+
+<label>Enter Email</label>
+
+<textarea name="email">{{email if email else ''}}</textarea>
+
+<button type="submit">Check Email</button>
+
+</form>
+
+</div>
+
+{% if result %}
+
+<p class="risk-score">Risk Score: {{risk_score}}%</p>
+
+<div class="risk-meter">
+
+<div class="risk-bar
+{% if risk_score|float < 30 %}
+safe
+{% elif risk_score|float < 60 %}
+medium
+{% else %}
+danger
+{% endif %}
+"
+style="width: {{risk_score}}%;">
+</div>
+
+</div>
+
+{% if "Legitimate" in result %}
+
+<div class="safe-result">
+✅ {{result}}
+</div>
+
+{% else %}
+
+<div class="phishing-result">
+⚠ {{result}}
+</div>
+
+{% endif %}
+
+{% endif %}
+
+</div>
+
+</div>
+
+<!-- ANALYSIS -->
+<div id="analysis" class="section">
+
+<h1 class="section-title">Data Analysis</h1>
+
+<div class="dataset-container">
+
+<form class="dataset-form">
+
+<label>Select Analysis</label>
+
+<select class="dataset-dropdown" id="analysisType" onchange="switchAnalysis()">
+
+<option value="url">URL Analysis</option>
+<option value="sms">SMS Analysis</option>
+<option value="email">Email Analysis</option>
+
+</select>
+
+</form>
+
+</div>
+
+
+<!-- URL Charts -->
+<div id="urlAnalysis" class="analysis-grid">
+
+<img src="{{ url_for('static', filename='url_count.png') }}">
+<img src="{{ url_for('static', filename='url_length.png') }}">
+<img src="{{ url_for('static', filename='url_pie.png') }}">
+
+<img src="{{ url_for('static', filename='url_box.png') }}">
+<img src="{{ url_for('static', filename='url_dots.png') }}">
+<img src="{{ url_for('static', filename='url_heatmap.png') }}">
+
+</div>
+
+<!-- SMS Charts -->
+<div id="smsAnalysis" class="analysis-grid" style="display:none">
+
+<img src="{{ url_for('static', filename='sms_count.png') }}">
+<img src="{{ url_for('static', filename='sms_length.png') }}">
+<img src="{{ url_for('static', filename='sms_pie.png') }}">
+
+<img src="{{ url_for('static', filename='sms_box.png') }}">
+<img src="{{ url_for('static', filename='sms_wordcloud.png') }}">
+<img src="{{ url_for('static', filename='sms_heatmap.png') }}">
+
+</div>
+
+
+<!-- EMAIL Charts -->
+<div id="emailAnalysis" class="analysis-grid" style="display:none">
+
+<img src="{{ url_for('static', filename='email_count.png') }}">
+<img src="{{ url_for('static', filename='email_length.png') }}">
+<img src="{{ url_for('static', filename='email_pie.png') }}">
+
+<img src="{{ url_for('static', filename='email_box.png') }}">
+<img src="{{ url_for('static', filename='email_wordcloud.png') }}">
+<img src="{{ url_for('static', filename='email_heatmap.png') }}">
+
+</div>
+
+</div>
+
+<!-- PERFORMANCE -->
+<div id="performance" class="section">
+
+<h1 class="section-title">Model Performance Analysis</h1>
+
+<div class="dataset-container">
+
+<form class="dataset-form">
+
+<label>Select Model</label>
+
+<select class="dataset-dropdown" id="perfType" onchange="switchPerformance()">
+
+<option value="url">URL Model</option>
+<option value="sms">SMS Model</option>
+<option value="email">Email Model</option>
+
+</select>
+
+</form>
+
+</div>
+
+
+<!-- URL PERFORMANCE -->
+<div id="urlPerf" class="performance-grid">
+
+<div class="perf-card accuracy">
+<h2>Accuracy Score</h2>
+<p>{{accuracy}}</p>
+</div>
+
+<div class="perf-card matrix">
+<img src="{{ url_for('static', filename='url_confusion.png') }}">
+</div>
+
+<div class="perf-card precision">
+<h2>Precision Score</h2>
+<p>{{precision}}</p>
+</div>
+
+<div class="perf-card recall">
+<h2>Recall Score</h2>
+<p>{{recall}}</p>
+</div>
+
+<div class="perf-card graph">
+<img src="{{ url_for('static', filename='url_training.png') }}">
+</div>
+
+<div class="perf-card f1">
+<h2>F1 Score</h2>
+<p>{{f1score}}</p>
+</div>
+
+</div>
+
+
+<!-- SMS PERFORMANCE -->
+<div id="smsPerf" class="performance-grid" style="display:none">
+
+<div class="perf-card accuracy"><h2>Accuracy</h2><p>96</p></div>
+
+<div class="perf-card matrix">
+<img src="{{ url_for('static', filename='sms_confusion.png') }}">
+</div>
+
+<div class="perf-card precision"><h2>Precision</h2><p>94</p></div>
+
+<div class="perf-card recall"><h2>Recall</h2><p>95</p></div>
+
+<div class="perf-card graph">
+<img src="{{ url_for('static', filename='sms_training.png') }}">
+</div>
+
+<div class="perf-card f1"><h2>F1 Score</h2><p>94.5</p></div>
+
+</div>
+
+
+<!-- EMAIL PERFORMANCE -->
+<div id="emailPerf" class="performance-grid" style="display:none">
+
+<div class="perf-card accuracy"><h2>Accuracy</h2><p>95</p></div>
+
+<div class="perf-card matrix">
+<img src="{{ url_for('static', filename='email_confusion.png') }}">
+</div>
+
+<div class="perf-card precision"><h2>Precision</h2><p>93</p></div>
+
+<div class="perf-card recall"><h2>Recall</h2><p>94</p></div>
+
+<div class="perf-card graph">
+<img src="{{ url_for('static', filename='email_training.png') }}">
+</div>
+
+<div class="perf-card f1"><h2>F1 Score</h2><p>93.5</p></div>
+
+</div>
+
+</div>
+<!--About-->
+<div id="about" class="section">
+
+<div class="about-banner">
+
+<h1 class="about-title-text">About Us</h1>
+
+<div class="about-underline"></div>
+
+</div>
+<div>
+<button class="about-btn" onclick="showSection('prediction')">
+VIEW PROJECT
+</button>
+</div>
+
+
+
+<div class="zigzag"></div>
+
+<div class="about-container">
+
+<h2 class="about-title">Project Information</h2>
+
+<div class="about-box-container">
+
+<div class="about-box left-box">
+
+<h3>Project Overview</h3>
+
+<p>
+Our project, the <b>Phishing Detection System</b>, is a machine learning
+based web application designed to detect phishing attacks in URLs,
+SMS messages, and Emails.
+</p>
+
+<p>
+The system analyzes input data using trained machine learning models
+to determine whether the content is legitimate or malicious.
+</p>
+
+</div>
+
+<div class="about-box right-box">
+
+<h3>Project Features</h3>
+
+<ul>
+<li>URL Phishing Detection</li>
+<li>SMS Spam / Smishing Detection</li>
+<li>Email Phishing Detection</li>
+<li>Risk Score Analysis</li>
+<li>Dataset Visualization</li>
+<li>Model Performance Analysis</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+</div>
+<!-- JAVASCRIPT -->
+<script>
+
+function showSection(sectionId) {
+
+    var sections = document.querySelectorAll(".section");
+
+    sections.forEach(function(section){
+        section.style.display="none";
+    });
+
+    document.getElementById(sectionId).style.display="block";
+}
+
+
+/* Switch prediction type */
+function switchDetection(){
+
+    var type=document.getElementById("detectType").value;
+
+    document.getElementById("urlBox").style.display="none";
+    document.getElementById("smsBox").style.display="none";
+    document.getElementById("emailBox").style.display="none";
+
+    if(type=="url"){
+        document.getElementById("urlBox").style.display="block";
+    }
+
+    if(type=="sms"){
+        document.getElementById("smsBox").style.display="block";
+    }
+
+    if(type=="email"){
+        document.getElementById("emailBox").style.display="block";
+    }
+
+}
+function switchAnalysis(){
+
+var type=document.getElementById("analysisType").value;
+
+document.getElementById("urlAnalysis").style.display="none";
+document.getElementById("smsAnalysis").style.display="none";
+document.getElementById("emailAnalysis").style.display="none";
+
+if(type=="url"){
+document.getElementById("urlAnalysis").style.display="grid";
+}
+
+if(type=="sms"){
+document.getElementById("smsAnalysis").style.display="grid";
+}
+
+if(type=="email"){
+document.getElementById("emailAnalysis").style.display="grid";
+}
+
+}
+function switchPerformance(){
+
+var type=document.getElementById("perfType").value;
+
+document.getElementById("urlPerf").style.display="none";
+document.getElementById("smsPerf").style.display="none";
+document.getElementById("emailPerf").style.display="none";
+
+if(type=="url"){
+document.getElementById("urlPerf").style.display="grid";
+}
+
+if(type=="sms"){
+document.getElementById("smsPerf").style.display="grid";
+}
+
+if(type=="email"){
+document.getElementById("emailPerf").style.display="grid";
+}
+
+}
+
+
+/* Page load logic */
+window.onload = function(){
+
+    var hash = window.location.hash;
+
+    if(hash){
+        showSection(hash.substring(1));
+    }
+    else{
+        showSection("home");   // default HOME page
+    }
+
+    // also initialize prediction box
+    if(document.getElementById("detectType")){
+        switchDetection();
+    }
+
+}
+
+</script>
