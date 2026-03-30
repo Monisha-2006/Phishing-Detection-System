@@ -198,27 +198,50 @@ style="width: {{risk_score}}%;">
 
 <!-- URL Charts -->
 <div id="urlAnalysis" class="analysis-grid">
+<div class="chart-box">
+<img src="{{ url_for('static', filename='url_count.png') }}" onclick="openModal(this)">
+</div>
+<div class="chart-box">
+<img src="{{ url_for('static', filename='url_length.png') }}" onclick="openModal(this)">
+</div>
+<div class="chart-box">
+<img src="{{ url_for('static', filename='url_pie.png') }}" onclick="openModal(this)">
+</div>
 
-<img src="{{ url_for('static', filename='url_count.png') }}">
-<img src="{{ url_for('static', filename='url_length.png') }}">
-<img src="{{ url_for('static', filename='url_pie.png') }}">
-
-<img src="{{ url_for('static', filename='url_box.png') }}">
-<img src="{{ url_for('static', filename='url_dots.png') }}">
-<img src="{{ url_for('static', filename='url_heatmap.png') }}">
+<div class="chart-box">
+<img src="{{ url_for('static', filename='url_box.png') }}" onclick="openModal(this)">
+</div>
+<div class="chart-box">
+<img src="{{ url_for('static', filename='url_dots.png') }}" onclick="openModal(this)">
+</div>
+<div class="chart-box">
+<img src="{{ url_for('static', filename='url_heatmap.png') }}" onclick="openModal(this)">
+</div>
 
 </div>
 
 <!-- SMS Charts -->
 <div id="smsAnalysis" class="analysis-grid" style="display:none">
 
-<img src="{{ url_for('static', filename='sms_count.png') }}">
-<img src="{{ url_for('static', filename='sms_length.png') }}">
-<img src="{{ url_for('static', filename='sms_pie.png') }}">
+<div class="chart-box">
+<img src="{{ url_for('static', filename='sms_count.png') }}" onclick="openModal(this)">
+</div>
+<div class="chart-box">
+<img src="{{ url_for('static', filename='sms_length.png') }}" onclick="openModal(this)">
+</div>
+<div class="chart-box">
+<img src="{{ url_for('static', filename='sms_pie.png') }}" onclick="openModal(this)">
+</div>
 
-<img src="{{ url_for('static', filename='sms_box.png') }}">
-<img src="{{ url_for('static', filename='sms_wordcloud.png') }}">
-<img src="{{ url_for('static', filename='sms_heatmap.png') }}">
+<div class="chart-box">
+<img src="{{ url_for('static', filename='sms_box.png') }}" onclick="openModal(this)">
+</div>
+<div class="chart-box">
+<img src="{{ url_for('static', filename='sms_wordcloud.png') }}" onclick="openModal(this)">
+</div>
+<div class="chart-box">
+<img src="{{ url_for('static', filename='sms_heatmap.png') }}" onclick="openModal(this)">
+</div>
 
 </div>
 
@@ -226,16 +249,33 @@ style="width: {{risk_score}}%;">
 <!-- EMAIL Charts -->
 <div id="emailAnalysis" class="analysis-grid" style="display:none">
 
-<img src="{{ url_for('static', filename='email_count.png') }}">
-<img src="{{ url_for('static', filename='email_length.png') }}">
-<img src="{{ url_for('static', filename='email_pie.png') }}">
+<div class="chart-box">
+<img src="{{ url_for('static', filename='email_count.png') }}" onclick="openModal(this)">
+</div>
+<div class="chart-box">
+<img src="{{ url_for('static', filename='email_length.png') }}" onclick="openModal(this)">
+</div>
+<div class="chart-box">
+<img src="{{ url_for('static', filename='email_pie.png') }}" onclick="openModal(this)">
+</div>
 
-<img src="{{ url_for('static', filename='email_box.png') }}">
-<img src="{{ url_for('static', filename='email_wordcloud.png') }}">
-<img src="{{ url_for('static', filename='email_heatmap.png') }}">
+<div class="chart-box">
+<img src="{{ url_for('static', filename='email_box.png') }}" onclick="openModal(this)">
+</div>
+<div class="chart-box">
+<img src="{{ url_for('static', filename='email_wordcloud.png') }}" onclick="openModal(this)">
+</div>
+<div class="chart-box">
+<img src="{{ url_for('static', filename='email_heatmap.png') }}" onclick="openModal(this)">
+</div>
 
 </div>
 
+</div>
+<!-- IMAGE POPUP MODAL -->
+<div id="imgModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImg">
 </div>
 
 <!-- PERFORMANCE -->
@@ -504,4 +544,12 @@ window.onload = function(){
 
 }
 
+function openModal(img){
+    document.getElementById("imgModal").style.display = "block";
+    document.getElementById("modalImg").src = img.src;
+}
+
+function closeModal(){
+    document.getElementById("imgModal").style.display = "none";
+}
 </script>

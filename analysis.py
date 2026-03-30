@@ -36,13 +36,16 @@ plt.close()
 # -----------------------
 
 plt.figure(figsize=(6,6))
+
 url_df['label'].value_counts().plot.pie(
-autopct='%1.1f%%',
-colors=['skyblue','salmon']
+    autopct='%1.1f%%',
+    colors=['skyblue','salmon']
 )
+
 plt.title("Phishing vs Legitimate URLs")
-plt.ylabel("")
-plt.savefig("static/url_pie.png")
+plt.axis('equal')
+plt.tight_layout()
+plt.savefig("static/url_pie.png", bbox_inches='tight')
 plt.close()
 
 # -----------------------
@@ -90,13 +93,18 @@ sms_df['length'] = sms_df['TEXT'].apply(len)
 
 # Pie chart
 plt.figure(figsize=(6,6))
+
 sms_df['LABEL'].value_counts().plot.pie(
-autopct='%1.1f%%',
-colors=['lightgreen','orange']
+    autopct='%1.1f%%',
+    colors=['lightgreen','orange']
 )
+
 plt.title("Spam vs Legitimate SMS")
-plt.ylabel("")
-plt.savefig("static/sms_pie.png")
+
+plt.axis('equal')
+plt.tight_layout()
+
+plt.savefig("static/sms_pie.png", bbox_inches='tight')
 plt.close()
 
 # Histogram
@@ -154,12 +162,13 @@ email_df['length'] = email_df['text_combined'].apply(len)
 # Pie chart
 plt.figure(figsize=(6,6))
 email_df['label'].value_counts().plot.pie(
-autopct='%1.1f%%',
-colors=['lightblue','red']
+    autopct='%1.1f%%',
+    colors=['lightblue','red']
 )
+plt.axis('equal')
+plt.tight_layout()
 plt.title("Phishing vs Legitimate Emails")
-plt.ylabel("")
-plt.savefig("static/email_pie.png")
+plt.savefig("static/email_pie.png", bbox_inches='tight')
 plt.close()
 
 # Histogram
